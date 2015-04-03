@@ -37,7 +37,8 @@ QList<VP_Word*> VP_LineAnalyzer::getWordList()
     foreach(QString str, finalStrList)
     {
       // Calculate col number
-      int colNumber = lineText.indexOf(str, ix) + ix;
+      int colNumber = lineText.indexOf(str, ix);
+      ix = colNumber+1; // To calculate the next col number
 
       // Create the new Word
       VP_Word *newWord = new VP_Word(str, lineNumber, colNumber);
@@ -52,7 +53,6 @@ QList<VP_Word*> VP_LineAnalyzer::getWordList()
 
       list << newWord;
 
-      ix += str.length(); // To calculate the col number
 
     }
   }
