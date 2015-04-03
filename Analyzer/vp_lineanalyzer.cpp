@@ -4,7 +4,7 @@
 
 #include <QStringList>
 
-VP_LineAnalyzer::VP_LineAnalyzer(QString lineText_l, U32 lineNumber_l, QObject *parent) :
+VP_LineAnalyzer::VP_LineAnalyzer(QString lineText_l, int lineNumber_l, QObject *parent) :
   QObject(parent)
 {
   lineText = lineText_l;
@@ -33,8 +33,28 @@ QList<VP_Word*> VP_LineAnalyzer::getWordList()
     //---------------------------------------------------------------
 
     // Construct the list of parser words
+    int ix = 0;
     foreach(QString str, finalStrList)
-      list << new VP_Word(str);
+    {
+      // Calculate col number
+      int colNumber = lineText.indexOf(str, ix) + ix;
+
+      // Create the new Word
+      VP_Word *newWord = new VP_Word(str, lineNumber, colNumber);
+
+      // To chained words
+      bool firstWord = list.isEmpty();
+      if(!firstWord)  // Not the first word in the line
+      {
+        newWord->setPreviousWord(list.last());
+        list.last()->setNextWord(newWord);
+      }
+
+      list << newWord;
+
+      ix += str.length(); // To calculate the col number
+
+    }
   }
 
   return list;
