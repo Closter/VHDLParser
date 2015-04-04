@@ -12,7 +12,7 @@ public:
   explicit AbstractParser(QObject *parent = 0);
 
 
-  QList<Word*> parseText(QString text);
+  QList<Word*> parseText(QString &text);
 
 
   // Accessors

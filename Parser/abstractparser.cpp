@@ -12,7 +12,7 @@ AbstractParser::AbstractParser(QObject *parent) :
  * @param text The string to parse
  * @return A list of all word contains in the text (excluding space and carriage return)
  */
-QList<Word*> AbstractParser::parseText(QString text)
+QList<Word*> AbstractParser::parseText(QString &text)
 {
   QList<Word*> list; // The list to return, empty at first
 
@@ -76,10 +76,11 @@ QStringList AbstractParser::splitByKeyword(QString &str)
   if(str.length() > 1)
   {
     KeyWord *kw = searchForAKeyWord(str);  // Search for a separator character
-    int kwIndex = kw->getColumn();
 
     if(kw != NULL) // Founded
     {
+      int kwIndex = kw->getColumn();
+
       // Has to be separated
       if(kwIndex != 0) // If null, there is no char before the special separator
       {
@@ -88,6 +89,8 @@ QStringList AbstractParser::splitByKeyword(QString &str)
       }
 
       int sepNbChar = kw->getText().length(); // Get the number of char from this special separator
+
+      delete kw;  // Don't need anymore
 
       list << str.left(sepNbChar);
       str = str.remove(0, sepNbChar); // First word before special separator. This word is removed from the string

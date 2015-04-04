@@ -2,10 +2,10 @@
 
 
 // list of keyword
-QList<QString> VHDLParser::m_specialChar = QList<QString>() << QString("First");
-//    << "--" <<"."   <<":"   <<";"   <<","   <<"<="  <<":="  <<"=>" <<"("
-//    << ")"  << "="  << "/=" << ">"  << "<"  << ">=" << "=<" << "+"
-//    << "-"  << "*"  << "/"  << "**" << "&";
+QList<QString> VHDLParser::m_specialChar = QList<QString>()
+    << "--" <<"."   <<":"   <<";"   <<","   <<"<="  <<":="  <<"=>" <<"("
+    << ")"  << "="  << "/=" << ">"  << "<"  << ">=" << "=<" << "+"
+    << "-"  << "*"  << "/"  << "**" << "&";
 
 
 VHDLParser::VHDLParser(QObject *parent) :
