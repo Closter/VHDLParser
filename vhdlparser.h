@@ -1,7 +1,7 @@
 #ifndef VHDLPARSER_H
 #define VHDLPARSER_H
 
-#include <QObject>
+#include "Parser/abstractparser.h"
 #include <QFile>
 
 
@@ -39,18 +39,17 @@
  * @brief The VHDLParser class contains a VHDL module's structural representation.
  *
  */
-class VHDLParser : public QObject
+class VHDLParser : public AbstractParser
 {
   Q_OBJECT
 public:
 
   explicit VHDLParser(QObject *parent = 0);
 
-  bool analyzeFile(QFile *file);
 
-signals:
+private:
 
-public slots:
+  static QList<QString> m_specialChar; ///< The string list of special character
 
 };
 
