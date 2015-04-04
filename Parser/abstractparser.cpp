@@ -5,6 +5,7 @@
 AbstractParser::AbstractParser(QObject *parent) :
   QObject(parent)
 {
+  m_keyWordList << "\n";  // Add new line character as a keyword to manage the line count
 }
 
 /**
@@ -19,8 +20,6 @@ QList<Word*> AbstractParser::parseText(QString &text)
   if(!text.isEmpty()) // Some characters in this line
   {
     QStringList strList = text.split(" ", QString::SkipEmptyParts); // Get each space separated word separately
-
-    m_keyWordList << "\n";  // Add new line character as a keyword to manage the line count
 
     // Manage case when no espace before or after a special separator
     //---------------------------------------------------------------
@@ -48,16 +47,14 @@ QList<Word*> AbstractParser::parseText(QString &text)
       Word *newWord = 0;
       if(isKeyword(str))
       {
+        newWord = new KeyWord(str, lineNumber, colNumber);
+
         // Manage new line (it's consider temporaly as a keyword)
         if(isNewLine(str))
         {
           lineNumber++;
           lastIxNewLine = text.indexOf(str, lastIxNewLine+1);
           nbCarBeforeThisLine += colNumber;
-        }
-        else  // Not a new line character, the word will be added
-        {
-          newWord = new KeyWord(str, lineNumber, colNumber);
         }
 
       }
