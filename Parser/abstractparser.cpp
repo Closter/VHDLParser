@@ -20,6 +20,8 @@ QList<Word*> AbstractParser::parseText(QString &text)
   {
     QStringList strList = text.split(" ", QString::SkipEmptyParts); // Get each space separated word separately
 
+    m_keyWordList << "\n";  // Add new line character as a keyword to manage the line count
+
     // Manage case when no espace before or after a special separator
     //---------------------------------------------------------------
     QStringList finalStrList;
@@ -29,30 +31,51 @@ QList<Word*> AbstractParser::parseText(QString &text)
     //---------------------------------------------------------------
 
     // Construct the list of parser words
-    int ix = 0;
+    int ixCol = 0;
+    int lastIxNewLine = 0;
+    int nbCarBeforeThisLine = 0;
+    int lineNumber = 1;
+    int colNumber = 1;
+    int charNumber = 1;
     foreach(QString str, finalStrList)
     {
       // Calculate col number
-      int lineNumber = 0;
-      int colNumber = text.indexOf(str, ix);
-      ix = colNumber+1; // To calculate the next col number
+      charNumber = text.indexOf(str, ixCol) + 1;
+      ixCol = charNumber;
+      colNumber = charNumber - nbCarBeforeThisLine;
 
       // Create the new Word
-      Word *newWord;
+      Word *newWord = 0;
       if(isKeyword(str))
-        newWord = new KeyWord(str, lineNumber, colNumber);
+      {
+        // Manage new line (it's consider temporaly as a keyword)
+        if(isNewLine(str))
+        {
+          lineNumber++;
+          lastIxNewLine = text.indexOf(str, lastIxNewLine+1);
+          nbCarBeforeThisLine += colNumber;
+        }
+        else  // Not a new line character, the word will be added
+        {
+          newWord = new KeyWord(str, lineNumber, colNumber);
+        }
+
+      }
       else
         newWord = new Word(str, lineNumber, colNumber);
 
-      // To chained words
-      bool firstWord = list.isEmpty();
-      if(!firstWord)  // Not the first word in the line
+      if(newWord != 0)
       {
-        newWord->setPreviousWord(list.last());
-        list.last()->setNextWord(newWord);
-      }
+        // To chained words
+        bool firstWord = list.isEmpty();
+        if(!firstWord)  // Not the first word in the line
+        {
+          newWord->setPreviousWord(list.last());
+          list.last()->setNextWord(newWord);
+        }
 
-      list << newWord;
+        list << newWord;
+      }
 
 
     }
@@ -151,3 +174,16 @@ bool AbstractParser::isKeyword(QString word)
   return m_keyWordList.contains(word);
 }
 
+
+/**
+ * @brief AbstractParser::isNewLine
+ * @param word String to check if it indeicates a new line
+ * @return True if it indicate a new line, otherwise false
+ */
+bool AbstractParser::isNewLine(QString word)
+{
+  if(word == "\n")
+    return true;
+
+  return false;
+}

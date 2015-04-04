@@ -35,6 +35,7 @@ private:
   QStringList splitByKeyword(QString &str);
   KeyWord *searchForAKeyWord(QString str);
   bool isKeyword(QString word);
+  bool isNewLine(QString word);
 
 
   QList<QString> m_keyWordList;    ///< The list of keyword to analyze
