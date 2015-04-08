@@ -12,7 +12,7 @@ public:
   explicit AbstractParser(QObject *parent = 0);
 
 
-  QList<Word*> parseText(QString &text);
+  QList<Word*> parse(QString &text);
 
 
   // Accessors
@@ -27,6 +27,11 @@ public:
     addKeyWord(word);
     return m_keyWordList;
   }
+
+  void addLineCommentId(QString lineComment)  ///< Append a new line comment
+  {
+    m_lineComment << lineComment;
+  }
   //----------
 
 
@@ -38,7 +43,8 @@ private:
   bool isNewLine(QString word);
 
 
-  QList<QString> m_keyWordList;    ///< The list of keyword to analyze
+  QList<QString> m_keyWordList;   ///< The list of keyword to analyze
+  QList<QString> m_lineComment;   ///< The list of line comment identifiers
 };
 
 #endif // ABSTRACTPARSER_H

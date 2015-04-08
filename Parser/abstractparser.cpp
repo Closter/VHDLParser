@@ -2,10 +2,13 @@
 
 #include <QStringList>
 
+
+#define ABSTRACT_PARSE_EOL  "\n"
+
 AbstractParser::AbstractParser(QObject *parent) :
   QObject(parent)
 {
-  m_keyWordList << "\n";  // Add new line character as a keyword to manage the line count
+  m_keyWordList << ABSTRACT_PARSE_EOL;  // Add new line character as a keyword to manage the line count
 }
 
 /**
@@ -13,7 +16,7 @@ AbstractParser::AbstractParser(QObject *parent) :
  * @param text The string to parse
  * @return A list of all word contains in the text (excluding space and carriage return)
  */
-QList<Word*> AbstractParser::parseText(QString &text)
+QList<Word*> AbstractParser::parse(QString &text)
 {
   QList<Word*> list; // The list to return, empty at first
 
@@ -36,8 +39,33 @@ QList<Word*> AbstractParser::parseText(QString &text)
     int lineNumber = 1;
     int colNumber = 1;
     int charNumber = 1;
+    bool isCommentActive = false;
     foreach(QString str, finalStrList)
     {
+      // Manage comment
+      bool thisWordIsComment = false;
+      if(!isCommentActive) // Not in a comment
+      {
+        foreach(QString lineComment, m_lineComment) // Check if this is a new comment
+        {
+          if(str == lineComment)
+          {
+            thisWordIsComment = true;
+            break;
+          }
+        }
+
+        isCommentActive = thisWordIsComment;
+      }
+      else  // Already into a line comment
+      {
+        thisWordIsComment = true;
+
+        if(str == ABSTRACT_PARSE_EOL) // End of a line comment
+          isCommentActive = false;    // And the last comment
+      }
+
+
       // Calculate col number
       charNumber = text.indexOf(str, ixCol) + 1;
       ixCol = charNumber;
@@ -59,7 +87,7 @@ QList<Word*> AbstractParser::parseText(QString &text)
 
       }
       else
-        newWord = new Word(str, lineNumber, colNumber);
+        newWord = new Word(str, lineNumber, colNumber, thisWordIsComment);
 
       if(newWord != 0)
       {

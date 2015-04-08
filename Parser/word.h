@@ -10,7 +10,7 @@ class Word : public QObject
 {
   Q_OBJECT
 public:
-  explicit Word(QString text, int lineNumber = -1, int colNumber = -1, Word *previous = 0, Word *next = 0, QObject *parent = 0);
+  explicit Word(QString text, int lineNumber = -1, int colNumber = -1, bool isComment = false, Word *previous = 0, Word *next = 0, QObject *parent = 0);
 
   Word *nextWord(int nbWord);
   Word *previousWord(int nbWord);
@@ -53,6 +53,11 @@ public:
     return m_previousWord;
   }
 
+  bool isComment()
+  {
+    return m_isComment;
+  }
+
   //----------
 
 
@@ -65,6 +70,8 @@ private:
   // Chained list of word
   Word  *m_previousWord;  ///< The previous word in the line
   Word  *m_nextWord;      ///< The next word in the line
+
+  bool m_isComment;         ///< Flag indicating that the word is a comment
 };
 
 #endif // WORD_H

@@ -1,7 +1,7 @@
 #include "word.h"
 
 
-Word::Word(QString text, int lineNumber, int colNumber, Word *previous, Word *next, QObject *parent) :
+Word::Word(QString text, int lineNumber, int colNumber, bool isComment, Word *previous, Word *next, QObject *parent) :
   QObject(parent)
 {
   // Update word's member
@@ -11,6 +11,8 @@ Word::Word(QString text, int lineNumber, int colNumber, Word *previous, Word *ne
 
   m_previousWord  = previous;
   m_nextWord      = next;
+
+  m_isComment = isComment;
 }
 
 

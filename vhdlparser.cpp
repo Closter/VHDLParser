@@ -57,6 +57,8 @@ VHDLParser::VHDLParser(QObject *parent) :
   foreach(QString str, m_specialChar)
     addKeyWord(str);
 
+  addLineCommentId(VP_VHDL_SX_SEP_CAR_COMMENTARY);
+
 }
 
 
@@ -67,16 +69,12 @@ VHDLParser::VHDLParser(QObject *parent) :
  */
 void VHDLParser::parse(QString strToParse)
 {
-  m_wordList.clear(); // Delete the old list
-
   // Extract the word list from this string
-  m_wordList = parseText(strToParse);
+  m_wordList = AbstractParser::parse(strToParse);
 
   // Look for libraries
   //-------------------
-
-
-
+  m_libraryList = lookForLibrarys();
   //-------------------
 
 }
@@ -156,15 +154,21 @@ QList<VP_Library *> VHDLParser::lookForLibrarys()
  * @brief VHDLParser::lookForWords Search the word wordToFind in the existing list of word.
  * The search is unsensitive to the case.
  * @param wordToFind The word to find
+ * @param lookInComments True to look into comments, otherwise False;
  * @return A list of pointer to the words founded in the list
  */
-QList<Word *> VHDLParser::lookForWords(QString wordToFind)
+QList<Word *> VHDLParser::lookForWords(QString wordToFind, bool lookInComments)
 {
   QList<Word *> list;
 
   foreach(Word *w, m_wordList)
   {
-    if(w->getText().compare(wordToFind, Qt::CaseInsensitive) == 0)
+    bool lookAtThisWord = true;
+    if(!lookInComments && w->isComment())  // Don't look in comment
+      lookAtThisWord = false;
+
+    if((w->getText().compare(wordToFind, Qt::CaseInsensitive) == 0) && // What we are looking for
+       lookAtThisWord)  // Should we look at it ?
     {
       list.append(w);
     }
@@ -173,3 +177,5 @@ QList<Word *> VHDLParser::lookForWords(QString wordToFind)
   return list;
 
 }
+
+

@@ -29,16 +29,35 @@ public:
   void parse(QString strToParse);
 
 
+  // Structure accessors
+  //--------------------
+  QList<VP_Library*> getLibraryList()
+  {
+    return m_libraryList;
+  }
+
+  //--------------------
+
+
 private:
 
-  QList<Word*> lookForWords(QString wordToFind);
-
   QList<VP_Library*> lookForLibrarys();
+
+
+  QList<Word*> lookForWords(QString wordToFind, bool lookInComments = false);
+
+  int nbWordsToSkipComments();
 
 
   static QList<QString> m_specialChar; ///< The string list of special character
 
   QList<Word*> m_wordList;
+
+  // VHDL structure management
+  //--------------------------
+  QList<VP_Library*> m_libraryList;
+
+  //--------------------------
 
 };
 
