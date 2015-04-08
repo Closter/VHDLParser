@@ -12,6 +12,9 @@ class Word : public QObject
 public:
   explicit Word(QString text, int lineNumber = -1, int colNumber = -1, Word *previous = 0, Word *next = 0, QObject *parent = 0);
 
+  Word *nextWord(int nbWord);
+  Word *previousWord(int nbWord);
+
 
   // Accessors
   //----------
@@ -40,12 +43,12 @@ public:
     m_previousWord = prev;
   }
 
-  Word *getNextWord()
+  Word *nextWord()
   {
     return m_nextWord;
   }
 
-  Word *getPreviousWord()
+  Word *previousWord()
   {
     return m_previousWord;
   }
