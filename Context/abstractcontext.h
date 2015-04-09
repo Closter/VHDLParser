@@ -3,7 +3,7 @@
 
 #include <QObject>
 
-#include "Parser/word.h"
+#include "Elements/vp_word.h"
 
 /**
  * @brief The AbstractContext class decribe a context of a VHDL structure :
@@ -18,33 +18,24 @@ class AbstractContext : public QObject
 {
   Q_OBJECT
 public:
-  explicit AbstractContext(Word *startingWord, Word *endingWord, QObject *parent = 0);
+  explicit AbstractContext(VP_Word *startingWord, VP_Word *endingWord, QObject *parent = 0);
 
-  QList<Word*> getWordList();
-
-
-  virtual void analyze() = 0; ///< Extract all sub context from this context
+  virtual void analyze(VP_Word *firstWord) = 0; ///< Extract all sub context from this context
 
 
   // Accessors
   //----------
-  Word *getStartingWord()
+  VP_Word *getWordList()
   {
-    return m_startOfContext;
-  }
-
-  Word *getEndingWord()
-  {
-    return m_endOfContext;
+    return m_wordList;
   }
 
 
   //----------
 
-private:
+protected:
 
-  Word *m_startOfContext; ///< The first word of this context
-  Word *m_endOfContext;   ///< The last word of this context
+  QList<VP_Word*> m_wordList;  ///< Context's word list
 
   QList<AbstractContext*> m_subContextList; ///< The list of sub-context of this context
 

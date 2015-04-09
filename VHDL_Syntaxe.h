@@ -52,6 +52,10 @@
 #define VP_VHDL_SX_KEYWORD_SIGNAL           "signal"
 #define VP_VHDL_SX_KEYWORD_ALIAS            "alias"
 #define VP_VHDL_SX_KEYWORD_BEGIN            "begin"
+#define VP_VHDL_SX_KEYWORD_IF               "if"
+#define VP_VHDL_SX_KEYWORD_THEN             "then
+#define VP_VHDL_SX_KEYWORD_CASE             "case"
+#define VP_VHDL_SX_KEYWORD_WHEN             "when"
 
 
 //#define
