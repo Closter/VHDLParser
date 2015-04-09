@@ -19,13 +19,13 @@ public:
   //----------
   void addKeyWord(QString word)      ///< Append a new Keyword in the list
   {
-    m_keyWordList << word;
+    m_specCharList << word;
   }
 
   QList<QString> &operator<<(QString word)    ///< Append a new Keyword in the list
   {
     addKeyWord(word);
-    return m_keyWordList;
+    return m_specCharList;
   }
 
   void addLineCommentId(QString lineComment)  ///< Append a new line comment
@@ -43,7 +43,7 @@ private:
   bool isNewLine(QString word);
 
 
-  QList<QString> m_keyWordList;   ///< The list of keyword to analyze
+  QList<QString> m_specCharList;  ///< The list of keyword to analyze
   QList<QString> m_lineComment;   ///< The list of line comment identifiers
 };
 

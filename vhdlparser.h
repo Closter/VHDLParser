@@ -2,7 +2,7 @@
 #define VHDLPARSER_H
 
 #include "Parser/abstractparser.h"
-#include "Parser/word.h"
+#include "Elements/vp_word.h"
 
 #include "Elements/vp_library.h"
 
@@ -45,13 +45,15 @@ private:
 
 
   QList<Word*> lookForWords(QString wordToFind, bool lookInComments = false);
+  bool isVHDLKeyword(Word *w);
 
   int nbWordsToSkipComments();
 
 
-  static QList<QString> m_specialChar; ///< The string list of special character
+  static QList<QString> m_specialCharVHDL;  ///< The string list of special character
+  static QList<QString> m_keywordList;      ///< VHDL Keywords
 
-  QList<Word*> m_wordList;
+  QList<VP_Word*> m_wordList;
 
   // VHDL structure management
   //--------------------------

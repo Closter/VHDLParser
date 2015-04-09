@@ -11,13 +11,15 @@ class VP_Word : public Word
 {
   Q_OBJECT
 public:
-  explicit VP_Word(QString word, int lineNumber = 0, int colNumber = 0, bool isComment = false, VP_Word *previous = NULL, VP_Word *next = NULL, QObject *parent = 0);
+  explicit VP_Word(QString word, int lineNumber = 0, int colNumber = 0, bool isKeyword = false, bool isComment = false, VP_Word *previous = NULL, VP_Word *next = NULL, QObject *parent = 0);
+  explicit VP_Word(Word *word, bool isKeyword = false, QObject *parent = 0);
 
 
 
 
 private:
 
+  bool m_isKeyword; ///< Indicate that this word is a VHDL keyword
 
 };
 

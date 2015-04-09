@@ -1,31 +1,10 @@
 #include "vhdlparser.h"
 
-#define VP_VHDL_SX_SEP_CAR_COMMENTARY         "--"
-#define VP_VHDL_SX_SEP_CAR_DOT                "."
-#define VP_VHDL_SX_SEP_CAR_COLON              ":"
-#define VP_VHDL_SX_SEP_CAR_SEMICOLON          ";"
-#define VP_VHDL_SX_SEP_CAR_COMMA              ","
-#define VP_VHDL_SX_SEP_CAR_SIGNAL_ASSIGNEMENT "<="
-#define VP_VHDL_SX_SEP_CAR_VAR_ASSIGNEMENT    ":="
-#define VP_VHDL_SX_SEP_CAR_PORT_ASSIGNEMENT   "=>"
-#define VP_VHDL_SX_SEP_CAR_OPEN_BRACKET       "("
-#define VP_VHDL_SX_SEP_CAR_CLOSE_BRACKET      ")"
-#define VP_VHDL_SX_SEP_CAR_COMPARE_EQUAL      "="
-#define VP_VHDL_SX_SEP_CAR_COMPARE_UNEQUAL    "/="
-#define VP_VHDL_SX_SEP_CAR_COMPARE_MORE       ">"
-#define VP_VHDL_SX_SEP_CAR_COMPARE_LESS       "<"
-#define VP_VHDL_SX_SEP_CAR_COMPARE_MORE_EQUAL ">="
-#define VP_VHDL_SX_SEP_CAR_COMPARE_EQUAL_LESS "=<"
-#define VP_VHDL_SX_SEP_CAR_OPERATOR_PLUS      "+"
-#define VP_VHDL_SX_SEP_CAR_OPERATOR_MINUS     "-"
-#define VP_VHDL_SX_SEP_CAR_OPERATOR_MULTIPLY  "*"
-#define VP_VHDL_SX_SEP_CAR_OPERATOR_DIVIDE    "/"
-#define VP_VHDL_SX_SEP_CAR_OPERATOR_EXPO      "**"
-#define VP_VHDL_SX_SEP_CAR_OPERATOR_CONCAT    "&"
+#include "VHDL_Syntaxe.h"
 
 
 // list of keyword
-QList<QString> VHDLParser::m_specialChar = QList<QString>()
+QList<QString> VHDLParser::m_specialCharVHDL = QList<QString>()
     << VP_VHDL_SX_SEP_CAR_COMMENTARY        
     << VP_VHDL_SX_SEP_CAR_DOT               
     << VP_VHDL_SX_SEP_CAR_COLON             
@@ -49,12 +28,46 @@ QList<QString> VHDLParser::m_specialChar = QList<QString>()
     << VP_VHDL_SX_SEP_CAR_OPERATOR_EXPO     
     << VP_VHDL_SX_SEP_CAR_OPERATOR_CONCAT;
 
+QList<QString> VHDLParser::m_keywordList = QList<QString>()
+    << VP_VHDL_SX_KEYWORD_LIBRARY
+    << VP_VHDL_SX_KEYWORD_USE
+    << VP_VHDL_SX_KEYWORD_ALL
+    << VP_VHDL_SX_KEYWORD_ENTITY
+    << VP_VHDL_SX_KEYWORD_PACKAGE
+    << VP_VHDL_SX_KEYWORD_BODY
+    << VP_VHDL_SX_KEYWORD_IS
+    << VP_VHDL_SX_KEYWORD_END
+    << VP_VHDL_SX_KEYWORD_IN
+    << VP_VHDL_SX_KEYWORD_OUT
+    << VP_VHDL_SX_KEYWORD_INOUT
+    << VP_VHDL_SX_KEYWORD_STD_LOGIC
+    << VP_VHDL_SX_KEYWORD_STD_LOGIC_VECTOR
+    << VP_VHDL_SX_KEYWORD_TO
+    << VP_VHDL_SX_KEYWORD_DOWNTO
+    << VP_VHDL_SX_KEYWORD_ARCHITECTURE
+    << VP_VHDL_SX_KEYWORD_OF
+    << VP_VHDL_SX_KEYWORD_COMPONENT
+    << VP_VHDL_SX_KEYWORD_GENERIC
+    << VP_VHDL_SX_KEYWORD_PORT
+    << VP_VHDL_SX_KEYWORD_MAP
+    << VP_VHDL_SX_KEYWORD_CONSTANT
+    << VP_VHDL_SX_KEYWORD_TYPE
+    << VP_VHDL_SX_KEYWORD_ARRAY
+    << VP_VHDL_SX_KEYWORD_SIGNAL
+    << VP_VHDL_SX_KEYWORD_ALIAS
+    << VP_VHDL_SX_KEYWORD_BEGIN;
+
+
+
+
+
+
 
 VHDLParser::VHDLParser(QObject *parent) :
   AbstractParser(parent)
 {
   // Construct the list of keyword
-  foreach(QString str, m_specialChar)
+  foreach(QString str, m_specialCharVHDL)
     addKeyWord(str);
 
   addLineCommentId(VP_VHDL_SX_SEP_CAR_COMMENTARY);
@@ -70,13 +83,38 @@ VHDLParser::VHDLParser(QObject *parent) :
 void VHDLParser::parse(QString strToParse)
 {
   // Extract the word list from this string
-  m_wordList = AbstractParser::parse(strToParse);
+  QList<Word*> wordList = AbstractParser::parse(strToParse);
+
+  // Create the liste of VHDL words
+  //-------------------------------
+  m_wordList.clear();
+  foreach(Word *w, wordList)
+    m_wordList << new VP_Word(w, isVHDLKeyword(w));
+  //-------------------------------
+
 
   // Look for libraries
   //-------------------
   m_libraryList = lookForLibrarys();
   //-------------------
 
+}
+
+
+/**
+ * @brief VHDLParser::isVHDLKeyword
+ * @param w The word to analyze
+ * @return True if this word is a VHDL Keyword.
+ */
+bool VHDLParser::isVHDLKeyword(Word *w)
+{
+  foreach(QString k, m_keywordList) // All VHDL keyword
+  {
+    if(w->getText().compare(k, Qt::CaseInsensitive) == 0) // Cas insensitive compare
+      return true;  // Is a keyword
+  }
+
+  return false; // Not a keyword
 }
 
 
