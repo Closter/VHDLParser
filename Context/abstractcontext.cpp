@@ -1,17 +1,27 @@
 #include "abstractcontext.h"
 
-AbstractContext::AbstractContext(VP_Word *startingWord, VP_Word *endingWord, QObject *parent) :
+AbstractContext::AbstractContext(QObject *parent) :
   QObject(parent)
 {
-
-  m_wordList << startingWord; // The first word is part of the list
-
-  while(m_wordList.last()->nextWord() != endingWord)  // Proceed to the end of context word
-    m_wordList << m_wordList.last()->nextWord();
-
-  m_wordList << endingWord; // The last word is part of the list
 
 }
 
 
 
+/**
+ * @brief AbstractContext::creatSubContext Add this new subcontext to the list and start the analyze
+ * @param context The new sub context
+ * @param firstWord The first word of the new context to analyze
+ * @return The word next to the end of this context
+ */
+VP_Word* AbstractContext::newSubContext(AbstractContext *context, VP_Word *firstWord)
+{
+  if(firstWord == NULL)
+    return NULL;
+
+  m_subContextList << context;  // Add this subcontext to the list
+
+  VP_Word *w = context->analyze(firstWord);  // Start analyze this subcontext
+
+  return w;
+}

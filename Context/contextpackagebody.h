@@ -3,12 +3,12 @@
 
 #include "Context/abstractcontext.h"
 
-class ContextPacKagEbody : public AbstractContext
+class ContextPackageBody : public AbstractContext
 {
 public:
-  ContextPacKagEbody(VP_Word *startingWord, VP_Word *endingWord, QObject *parent = 0);
+  ContextPackageBody(QObject *parent = 0);
 
-  void analyze(VP_Word *firstWord);
+  VP_Word *analyze(VP_Word *firstWord);
 
 };
 

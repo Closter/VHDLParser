@@ -1,7 +1,7 @@
 #include "contextpackagedeclaration.h"
 
-ContextPackagEdeclaration::ContextPackagEdeclaration(VP_Word *startingWord, VP_Word *endingWord, QObject *parent):
-  AbstractContext(startingWord, endingWord, parent)
+ContextPackageDeclaration::ContextPackageDeclaration(QObject *parent):
+  AbstractContext(parent)
 {
 }
 
@@ -10,7 +10,7 @@ ContextPackagEdeclaration::ContextPackagEdeclaration(VP_Word *startingWord, VP_W
  * @brief ContextPackagEdeclaration::analyze
  * @param firstWord Pointer to the first word to analyze
  */
-void ContextPackagEdeclaration::analyze(VP_Word *firstWord)
+VP_Word *ContextPackageDeclaration::analyze(VP_Word *firstWord)
 {
 
 }

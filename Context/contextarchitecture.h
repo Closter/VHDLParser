@@ -6,9 +6,9 @@
 class ContextArchitEcture : public AbstractContext
 {
 public:
-  ContextArchitEcture(VP_Word *startingWord, VP_Word *endingWord, QObject *parent = 0);
+  ContextArchitEcture(QObject *parent = 0);
 
-  void analyze(VP_Word *firstWord);
+  VP_Word* analyze(VP_Word *firstWord);
 
 };
 

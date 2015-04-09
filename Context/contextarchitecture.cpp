@@ -1,7 +1,7 @@
 #include "contextarchitecture.h"
 
-ContextArchitEcture::ContextArchitEcture(VP_Word *startingWord, VP_Word *endingWord, QObject *parent):
-  AbstractContext(startingWord, endingWord, parent)
+ContextArchitEcture::ContextArchitEcture(QObject *parent):
+  AbstractContext(parent)
 {
 }
 
@@ -10,7 +10,7 @@ ContextArchitEcture::ContextArchitEcture(VP_Word *startingWord, VP_Word *endingW
  * @brief ContextArchitEcture::analyze
  * @param firstWord Pointer to the first word to analyze
  */
-void ContextArchitEcture::analyze(VP_Word *firstWord)
+VP_Word *ContextArchitEcture::analyze(VP_Word *firstWord)
 {
 
 }

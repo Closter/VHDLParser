@@ -1,7 +1,7 @@
 #include "contextpackagebody.h"
 
-ContextPackagEbody::ContextPackagEbody(VP_Word *startingWord, VP_Word *endingWord, QObject *parent):
-  AbstractContext(startingWord, endingWord, parent)
+ContextPackageBody::ContextPackageBody(QObject *parent):
+  AbstractContext(parent)
 {
 }
 
@@ -10,7 +10,7 @@ ContextPackagEbody::ContextPackagEbody(VP_Word *startingWord, VP_Word *endingWor
  * @brief ContextPackagEbody::analyze
  * @param firstWord Pointer to the first word to analyze
  */
-void ContextPackagEbody::analyze(VP_Word *firstWord)
+VP_Word* ContextPackageBody::analyze(VP_Word *firstWord)
 {
 
 }

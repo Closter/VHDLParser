@@ -1,7 +1,7 @@
 #include "contextlibdeclaration.h"
 
-ContextLibDeclaration::ContextLibDeclaration(VP_Word *startingWord, VP_Word *endingWord, QObject *parent):
-  AbstractContext(startingWord, endingWord, parent)
+ContextLibDeclaration::ContextLibDeclaration(QObject *parent):
+  AbstractContext(parent)
 {
 }
 
@@ -10,7 +10,7 @@ ContextLibDeclaration::ContextLibDeclaration(VP_Word *startingWord, VP_Word *end
  * @brief ContextLibDeclaration::analyze
  * @param firstWord Pointer to the first word to analyze
  */
-void ContextLibDeclaration::analyze(VP_Word *firstWord)
+VP_Word* ContextLibDeclaration::analyze(VP_Word *firstWord)
 {
 
 }

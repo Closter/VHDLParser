@@ -1,7 +1,7 @@
 #include "contextlibuse.h"
 
-ContextLibUse::ContextLibUse(VP_Word *startingWord, VP_Word *endingWord, QObject *parent):
-  AbstractContext(startingWord, endingWord, parent)
+ContextLibUse::ContextLibUse(QObject *parent):
+  AbstractContext(parent)
 {
 }
 
@@ -10,7 +10,7 @@ ContextLibUse::ContextLibUse(VP_Word *startingWord, VP_Word *endingWord, QObject
  * @brief ContextLibUse::analyze
  * @param firstWord Pointer to the first word to analyze
  */
-void ContextLibUse::analyze(VP_Word *firstWord)
+VP_Word *ContextLibUse::analyze(VP_Word *firstWord)
 {
 
 }

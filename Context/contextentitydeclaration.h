@@ -3,12 +3,12 @@
 
 #include "Context/abstractcontext.h"
 
-class ContextEntItyDeclaration : public AbstractContext
+class ContextEntityDeclaration : public AbstractContext
 {
 public:
-  ContextEntItyDeclaration(VP_Word *startingWord, VP_Word *endingWord, QObject *parent = 0);
+  ContextEntityDeclaration(QObject *parent = 0);
 
-  void analyze(VP_Word *firstWord);
+  VP_Word* analyze(VP_Word *firstWord);
 
 };
 

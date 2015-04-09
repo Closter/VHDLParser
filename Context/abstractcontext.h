@@ -18,24 +18,21 @@ class AbstractContext : public QObject
 {
   Q_OBJECT
 public:
-  explicit AbstractContext(VP_Word *startingWord, VP_Word *endingWord, QObject *parent = 0);
+  explicit AbstractContext(QObject *parent = 0);
 
-  virtual void analyze(VP_Word *firstWord) = 0; ///< Extract all sub context from this context
+  virtual VP_Word* analyze(VP_Word *firstWord) = 0; ///< Extract all sub context from this context
 
 
   // Accessors
   //----------
-  VP_Word *getWordList()
-  {
-    return m_wordList;
-  }
 
 
   //----------
 
 protected:
 
-  QList<VP_Word*> m_wordList;  ///< Context's word list
+  VP_Word *newSubContext(AbstractContext *context, VP_Word *firstWord);
+
 
   QList<AbstractContext*> m_subContextList; ///< The list of sub-context of this context
 

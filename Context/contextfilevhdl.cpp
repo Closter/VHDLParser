@@ -19,8 +19,8 @@ QList<QString> ContextFileVHDL::m_keywordList = QList<QString>()
     << VP_VHDL_SX_KEYWORD_ARCHITECTURE;
 
 
-ContextFileVHDL::ContextFileVHDL(VP_Word *startingWord, VP_Word *endingWord, QObject *parent):
-  AbstractContext(startingWord, endingWord, parent)
+ContextFileVHDL::ContextFileVHDL(QObject *parent):
+  AbstractContext(parent)
 {
 }
 
@@ -37,8 +37,10 @@ ContextFileVHDL::ContextFileVHDL(VP_Word *startingWord, VP_Word *endingWord, QOb
  * - Package body
  *
  * @param firstWord Pointer to the first word to analyze
+ *
+ * @return The next word after this context to continue analyze
  */
-void ContextFileVHDL::analyze(VP_Word *firstWord)
+VP_Word* ContextFileVHDL::analyze(VP_Word *firstWord)
 {
   VP_Word *w = firstWord; // Start from this word
 
@@ -46,35 +48,37 @@ void ContextFileVHDL::analyze(VP_Word *firstWord)
   {
     if(w->getText().compare(VP_VHDL_SX_KEYWORD_LIBRARY, Qt::CaseInsensitive) == 0)  // It's a library declaration
     {
-      m_subContextList << new ContextLibDeclaration()
+      w = newSubContext(new ContextLibDeclaration(this), static_cast<VP_Word*>(w->nextWord()));  // Create this subcontext
     }
     else if(w->getText().compare(VP_VHDL_SX_KEYWORD_USE, Qt::CaseInsensitive) == 0)  // It's a library use declaration
     {
-
+      w = newSubContext(new ContextLibUse(this), static_cast<VP_Word*>(w->nextWord()));
     }
     else if(w->getText().compare(VP_VHDL_SX_KEYWORD_ENTITY, Qt::CaseInsensitive) == 0)  // It's a entity declaration
     {
-
+      w = newSubContext(new ContextEntityDeclaration(this), static_cast<VP_Word*>(w->nextWord()));
     }
     else if(w->getText().compare(VP_VHDL_SX_KEYWORD_PACKAGE, Qt::CaseInsensitive) == 0)  // It's something around package
     {
-      if(w->nextWord() != NULL) // a word exists after
+      if(w->nextWord()->getText().compare(VP_VHDL_SX_KEYWORD_BODY, Qt::CaseInsensitive) == 0) // It's a package body
       {
-        if(w->nextWord()->getText().compare(VP_VHDL_SX_KEYWORD_BODY, Qt::CaseInsensitive) == 0) // It's a package body
-        {
-
-        }
-        else // It's a package declaration
-        {
-
-        }
+        w = newSubContext(new ContextPackageBody(this), static_cast<VP_Word*>(w->nextWord(2)));
+      }
+      else // It's a package declaration
+      {
+        w = newSubContext(new ContextPackageDeclaration(this), static_cast<VP_Word*>(w->nextWord()));
       }
     }
     else if(w->getText().compare(VP_VHDL_SX_KEYWORD_ARCHITECTURE, Qt::CaseInsensitive) == 0)  // It's a entity architecture
     {
-
+      w = newSubContext(new ContextArchitEcture(this), static_cast<VP_Word*>(w->nextWord()));
     }
 
   };
 
+  return w; // The end of a VHDL file context is the end of a file
 }
+
+
+
+
