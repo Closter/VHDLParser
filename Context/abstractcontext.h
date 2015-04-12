@@ -33,8 +33,15 @@ protected:
 
   VP_Word *newSubContext(AbstractContext *context, VP_Word *firstWord);
 
+  QList<VP_Word*> lookForWords(VP_Word *firstWord, QString wordText);
+  VP_Word* lastWordOfThisContext(VP_Word *firstWord);
+
+  QList<QString> m_contextKeywordList;  ///< The list of keyword from this context
 
   QList<AbstractContext*> m_subContextList; ///< The list of sub-context of this context
+
+private:
+  bool isKeywordFromThisContext(VP_Word *word);
 
 };
 

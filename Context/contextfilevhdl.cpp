@@ -4,8 +4,7 @@
 
 #include "Context/contextarchitecture.h"
 #include "Context/contextentitydeclaration.h"
-#include "Context/contextlibdeclaration.h"
-#include "Context/contextlibuse.h"
+#include "Context/contextlibrary.h"
 #include "Context/contextpackagebody.h"
 #include "Context/contextpackagedeclaration.h"
 
@@ -46,32 +45,34 @@ VP_Word* ContextFileVHDL::analyze(VP_Word *firstWord)
 
   while((w != NULL) && (w->nextWord() != NULL))
   {
-    if(w->getText().compare(VP_VHDL_SX_KEYWORD_LIBRARY, Qt::CaseInsensitive) == 0)  // It's a library declaration
+    // It's a library declaration
+    if(w->getText().compare(VP_VHDL_SX_KEYWORD_LIBRARY, Qt::CaseInsensitive) == 0)
     {
-      w = newSubContext(new ContextLibDeclaration(this), static_cast<VP_Word*>(w->nextWord()));  // Create this subcontext
+      w = newSubContext(new ContextLibrary(this), static_cast<VP_Word*>(w));  // Create this subcontext
     }
-    else if(w->getText().compare(VP_VHDL_SX_KEYWORD_USE, Qt::CaseInsensitive) == 0)  // It's a library use declaration
+    // It's a entity declaration
+    else if(w->getText().compare(VP_VHDL_SX_KEYWORD_ENTITY, Qt::CaseInsensitive) == 0)
     {
-      w = newSubContext(new ContextLibUse(this), static_cast<VP_Word*>(w->nextWord()));
+      w = newSubContext(new ContextEntityDeclaration(this), static_cast<VP_Word*>(w));
     }
-    else if(w->getText().compare(VP_VHDL_SX_KEYWORD_ENTITY, Qt::CaseInsensitive) == 0)  // It's a entity declaration
+    // It's something around package
+    else if(w->getText().compare(VP_VHDL_SX_KEYWORD_PACKAGE, Qt::CaseInsensitive) == 0)
     {
-      w = newSubContext(new ContextEntityDeclaration(this), static_cast<VP_Word*>(w->nextWord()));
-    }
-    else if(w->getText().compare(VP_VHDL_SX_KEYWORD_PACKAGE, Qt::CaseInsensitive) == 0)  // It's something around package
-    {
-      if(w->nextWord()->getText().compare(VP_VHDL_SX_KEYWORD_BODY, Qt::CaseInsensitive) == 0) // It's a package body
+      // It's a package body
+      if(w->nextWord()->getText().compare(VP_VHDL_SX_KEYWORD_BODY, Qt::CaseInsensitive) == 0)
       {
         w = newSubContext(new ContextPackageBody(this), static_cast<VP_Word*>(w->nextWord(2)));
       }
-      else // It's a package declaration
+      // It's a package declaration
+      else
       {
         w = newSubContext(new ContextPackageDeclaration(this), static_cast<VP_Word*>(w->nextWord()));
       }
     }
-    else if(w->getText().compare(VP_VHDL_SX_KEYWORD_ARCHITECTURE, Qt::CaseInsensitive) == 0)  // It's a entity architecture
+    // It's a entity architecture
+    else if(w->getText().compare(VP_VHDL_SX_KEYWORD_ARCHITECTURE, Qt::CaseInsensitive) == 0)
     {
-      w = newSubContext(new ContextArchitEcture(this), static_cast<VP_Word*>(w->nextWord()));
+      w = newSubContext(new ContextArchitEcture(this), static_cast<VP_Word*>(w));
     }
 
   };
