@@ -15,16 +15,15 @@ public:
 
   // Overload
   //---------
-  VP_Word* nextWord()
+  VP_Word* nextWord(bool nextComment = true)
   {
-    return static_cast<VP_Word*>(Word::nextWord());
+    return static_cast<VP_Word*>(Word::nextWord(nextComment));
   }
 
-  VP_Word* nextWord(int nbWord)
+  VP_Word* nextWord(int nbWord, bool nextComment = true)
   {
-    return static_cast<VP_Word*>(Word::nextWord(nbWord));
+    return static_cast<VP_Word*>(Word::nextWord(nbWord, nextComment));
   }
-
   //---------
 
 

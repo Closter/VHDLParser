@@ -74,6 +74,7 @@ Word *Word::previousWord(bool nextComment)
  * @brief Word::nextWord Return the word next to this word after nbWord.
  * nextWord(1) is equivalent to nextWord().
  * @param nbWord Nb word to skip
+ * @param nextComment If true, return the next word, this word could be a comment. If False, this word could not be a comment.
  * @return NULL if no word exists or a pointer to the corresponding word.
  */
 Word *Word::nextWord(int nbWord, bool nextComment)
@@ -96,6 +97,7 @@ Word *Word::nextWord(int nbWord, bool nextComment)
  * @brief Word::previousWord Return the word befor to this word skipping nbWord.
  * previousWord(1) is equivalent to previousWord().
  * @param nbWord Nb word to skip
+ * @param nextComment If true, return the word before, this word could be a comment. If False, this word could not be a comment.
  * @return NULL if no word exists or a pointer to the corresponding word.
  */
 Word *Word::previousWord(int nbWord, bool nextComment)
