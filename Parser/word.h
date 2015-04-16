@@ -12,8 +12,11 @@ class Word : public QObject
 public:
   explicit Word(QString text, int lineNumber = -1, int colNumber = -1, bool isComment = false, Word *previous = 0, Word *next = 0, QObject *parent = 0);
 
-  Word *nextWord(int nbWord);
-  Word *previousWord(int nbWord);
+  Word *nextWord(bool nextComment = true);
+  Word *previousWord(bool nextComment = true);
+
+  Word *nextWord(int nbWord, bool nextComment = true);
+  Word *previousWord(int nbWord, bool nextComment = true);
 
 
   // Accessors
@@ -41,16 +44,6 @@ public:
   void setPreviousWord(Word *prev)
   {
     m_previousWord = prev;
-  }
-
-  Word *nextWord()
-  {
-    return m_nextWord;
-  }
-
-  Word *previousWord()
-  {
-    return m_previousWord;
   }
 
   bool isComment()
