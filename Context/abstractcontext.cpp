@@ -30,6 +30,7 @@ VP_Word* AbstractContext::newSubContext(AbstractContext *context, VP_Word *first
 /**
  * @brief AbstractContext::lookForWords Search for a word in this context.
  * The search stop at the first keyword don't know in this context.
+ * It looks only out of comments.
  * @param firstWord The first word to start the search
  * @param wordText The text of the word to find
  * @return A list of correspondig word
@@ -41,15 +42,18 @@ QList<VP_Word*> AbstractContext::lookForWords(VP_Word *firstWord, QString wordTe
 
   do
   {
-    if(currentWord->isKeyword())
+    if(!currentWord->isComment())
     {
-      if(isKeywordFromThisContext(currentWord))
+      if(currentWord->isKeyword())
       {
-        if(currentWord->getText().compare(wordText, Qt::CaseInsensitive) == 0)  // Is the word to look for
-          wordList << currentWord;  // Yes
+        if(isKeywordFromThisContext(currentWord))
+        {
+          if(currentWord->getText().compare(wordText, Qt::CaseInsensitive) == 0)  // Is the word to look for
+            wordList << currentWord;  // Yes
+        }
+        else  // Not a keyword from this context
+          break;  // End of look
       }
-      else  // Not a keyword from this context
-        break;  // End of look
     }
 
     currentWord = currentWord->nextWord();
@@ -85,7 +89,7 @@ bool AbstractContext::isKeywordFromThisContext(VP_Word *word)
 
 /**
  * @brief AbstractContext::lastWordOfThisContext Search and return the last word of this context :
- * the next word is the first word of the next context (always a keyword).
+ * the next word is the first word of the next context (always a keyword) out of comments.
  * @param firstWord The first word to start the search.
  * @return The last word of this context.
  */
@@ -95,11 +99,14 @@ VP_Word* AbstractContext::lastWordOfThisContext(VP_Word *firstWord)
 
   while(currentWord->nextWord() != NULL)
   {
-    if(currentWord->nextWord()->isKeyword())
+    if(!currentWord->nextWord()->isComment())
     {
-      if(!isKeywordFromThisContext(currentWord->nextWord()))  // This keyword is not from this context
+      if(currentWord->nextWord()->isKeyword())
       {
-        break;
+        if(!isKeywordFromThisContext(currentWord->nextWord()))  // This keyword is not from this context
+        {
+          break;
+        }
       }
     }
 

@@ -72,6 +72,8 @@ VHDLParser::VHDLParser(QObject *parent) :
 
   addLineCommentId(VP_VHDL_SX_SEP_CAR_COMMENTARY);
 
+  m_fileContext = NULL;
+
 }
 
 
@@ -89,14 +91,34 @@ void VHDLParser::parse(QString strToParse)
   //-------------------------------
   m_wordList.clear();
   foreach(Word *w, wordList)
-    m_wordList << new VP_Word(w, isVHDLKeyword(w));
+  {
+    VP_Word *lastWord;
+    if(m_wordList.count() == 0) // No word in this list
+      lastWord = NULL;
+    else
+      lastWord = m_wordList.last();
+
+    VP_Word *newWord = new VP_Word(w->getText(),
+                                   w->getLine(),
+                                   w->getColumn(),
+                                   isVHDLKeyword(w),
+                                   w->isComment(),
+                                   lastWord);
+    if(lastWord != NULL)  // Already at least one word
+      m_wordList.last()->setNextWord(newWord);  // Construct the chained list
+
+    m_wordList << newWord;
+  }
   //-------------------------------
 
+  // Reinitialize
+  delete m_fileContext;
 
-  // Look for libraries
-  //-------------------
-  m_libraryList = lookForLibrarys();
-  //-------------------
+  // Start content analyzis by context
+  //----------------------------------
+  m_fileContext = new ContextFileVHDL(this);
+  m_fileContext->analyze(m_wordList.first());
+  //----------------------------------
 
 }
 
@@ -116,104 +138,3 @@ bool VHDLParser::isVHDLKeyword(Word *w)
 
   return false; // Not a keyword
 }
-
-
-/**
- * @brief VHDLParser::lookForLibrarys Search for all library declared in the word list
- * @return Teh list of founded library
- */
-QList<VP_Library *> VHDLParser::lookForLibrarys()
-{
-  QList<VP_Library*> libList;
-
-  QList<Word*> libKeyWordList = lookForWords(VP_LIBRARY_LIB_KEYWORD); // Start to look for library declaration
-  QList<Word*> useKeyWordList = lookForWords(VP_LIBRARY_USE_KEYWORD); // And look for use declaration
-
-  // Create a list of library string name
-  //-------------------------------------
-  QList<QString> libStrList;
-
-  foreach(Word *lib, libKeyWordList)
-  {
-    if(lib->nextWord() != NULL)
-      libStrList << lib->nextWord()->getText();  // The library name is the word after "Library" keyword
-  }
-  //-------------------------------------
-
-  // Create a list of library use name
-  //----------------------------------
-  QList<QString> useStrList;
-
-  foreach(Word *use, useKeyWordList)
-  {
-    // Check for correct use formation
-    if(use->nextWord(VP_LIBRARY_USE_ENDLINE_IX) != NULL)  // Enough word
-    {
-      if((use->nextWord(VP_LIBRARY_USE_DOT1_IX)->getText() == VP_VHDL_SX_SEP_CAR_DOT) &&  // First dot detected
-         (use->nextWord(VP_LIBRARY_USE_DOT2_IX)->getText() == VP_VHDL_SX_SEP_CAR_DOT) &&  // second dot detected
-         (use->nextWord(VP_LIBRARY_USE_ENDLINE_IX)->getText() == VP_VHDL_SX_SEP_CAR_SEMICOLON)) // End of line detected
-      {
-        useStrList << use->nextWord(VP_LIBRARY_USE_LIB_WORD_IX)->getText(); // The library name is the word after "use" keyword
-      }
-    }
-  }
-  //----------------------------------
-
-  // Each use declaration should refere to a library declaration
-  foreach(QString use, useStrList)
-  {
-    foreach(QString lib, libStrList)
-    {
-      if(use.compare(lib, Qt::CaseInsensitive) == 0)  // The use declaration refers to the library declaration
-      {
-        // Get index of each element
-        int ixOfLib = libStrList.indexOf(lib);
-        int ixOfUse = useStrList.indexOf(use);
-        Word *libWord = libKeyWordList[ixOfLib]->nextWord();
-        Word *useWord = useKeyWordList[ixOfUse];
-
-        // Create corresponding library and add to the lib list
-        libList << new VP_Library(QPoint(libWord->getLine(), libWord->getColumn()),
-                                  QPoint(useWord->nextWord(VP_LIBRARY_USE_LIB_WORD_IX)->getLine(), useWord->nextWord(VP_LIBRARY_USE_LIB_WORD_IX)->getColumn()),
-                                  useWord->nextWord(VP_LIBRARY_USE_LIB_WORD_IX)->getText(),
-                                  useWord->nextWord(VP_LIBRARY_USE_PKG_WORD_IX)->getText(),
-                                  useWord->nextWord(VP_LIBRARY_USE_PKG_USE_IX)->getText());
-      }
-    }
-  }
-
-  return libList;
-}
-
-
-
-
-/**
- * @brief VHDLParser::lookForWords Search the word wordToFind in the existing list of word.
- * The search is unsensitive to the case.
- * @param wordToFind The word to find
- * @param lookInComments True to look into comments, otherwise False;
- * @return A list of pointer to the words founded in the list
- */
-QList<Word *> VHDLParser::lookForWords(QString wordToFind, bool lookInComments)
-{
-  QList<Word *> list;
-
-  foreach(Word *w, m_wordList)
-  {
-    bool lookAtThisWord = true;
-    if(!lookInComments && w->isComment())  // Don't look in comment
-      lookAtThisWord = false;
-
-    if((w->getText().compare(wordToFind, Qt::CaseInsensitive) == 0) && // What we are looking for
-       lookAtThisWord)  // Should we look at it ?
-    {
-      list.append(w);
-    }
-  }
-
-  return list;
-
-}
-
-

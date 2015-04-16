@@ -4,7 +4,7 @@
 #include "Parser/abstractparser.h"
 #include "Elements/vp_word.h"
 
-#include "Elements/vp_library.h"
+#include "Context/contextfilevhdl.h"
 
 
 
@@ -29,22 +29,8 @@ public:
   void parse(QString strToParse);
 
 
-  // Structure accessors
-  //--------------------
-  QList<VP_Library*> getLibraryList()
-  {
-    return m_libraryList;
-  }
-
-  //--------------------
-
-
 private:
 
-  QList<VP_Library*> lookForLibrarys();
-
-
-  QList<Word*> lookForWords(QString wordToFind, bool lookInComments = false);
   bool isVHDLKeyword(Word *w);
 
   int nbWordsToSkipComments();
@@ -57,7 +43,7 @@ private:
 
   // VHDL structure management
   //--------------------------
-  QList<VP_Library*> m_libraryList;
+  ContextFileVHDL *m_fileContext;
 
   //--------------------------
 
