@@ -1,6 +1,7 @@
 #include "contextgenericdeclaration.h"
 
-ContextGenericDeclaration::ContextGenericDeclaration(QObject *parent)
+ContextGenericDeclaration::ContextGenericDeclaration(QObject *parent):
+  AbstractContext(parent)
 {
 }
 

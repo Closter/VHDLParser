@@ -2,6 +2,8 @@
 
 #include "VHDL_Syntaxe.h"
 
+#include "contextgenericdeclaration.h"
+
 ContextEntityDeclaration::ContextEntityDeclaration( QObject *parent):
   AbstractContext(parent)
 {
@@ -68,7 +70,7 @@ VP_Word *ContextEntityDeclaration::findSubContext(VP_Word *firstWord)
       // Check for generics declaration
       if(currentWord->getText().compare(VP_VHDL_SX_KEYWORD_GENERIC, Qt::CaseInsensitive) == 0)
       {
-        // TODO New Generic
+        currentWord = newSubContext(new ContextGenericDeclaration(this), currentWord);
       }
       // Check for ports declaration
       else if(currentWord->getText().compare(VP_VHDL_SX_KEYWORD_PORT, Qt::CaseInsensitive) == 0)
