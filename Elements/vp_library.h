@@ -1,8 +1,7 @@
 #ifndef VP_LIBRARY_H
 #define VP_LIBRARY_H
 
-#include <QObject>
-#include <QPoint>
+#include "vp_abstractdeclaration.h"
 
 #define VP_LIBRARY_LIB_KEYWORD  "library"
 #define VP_LIBRARY_USE_KEYWORD  "use"
@@ -18,28 +17,18 @@
 /**
  * @brief The VP_Library class decribe a library declaration in VHDL
  */
-class VP_Library : public QObject
+class VP_Library : public VP_AbstractDeclaration
 {
   Q_OBJECT
 public:
-  explicit VP_Library(QPoint posLibrary, QPoint posPackage, QString libraryName, QString packageName, QString partName, QObject *parent = 0);
+  explicit VP_Library(QPoint posLibrary, QPoint posPackage, QString libraryName, QString packageName, QString partName);
 
 
   // Accessors
   //----------
-  QPoint getPosLibrary()
-  {
-    return m_posLibrary;
-  }
-
   QPoint getPosPackage()
   {
     return m_posPackage;
-  }
-
-  QString getLibraryName()
-  {
-    return m_library;
   }
 
   QString getPacakgeName()

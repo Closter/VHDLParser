@@ -4,13 +4,11 @@
 #define VP_LIBRARY_KEYWORD_ALL  "all"
 
 
-VP_Library::VP_Library(QPoint posLibrary, QPoint posPackage, QString libraryName, QString packageName, QString partName, QObject *parent) :
-  QObject(parent)
+VP_Library::VP_Library(QPoint posLibrary, QPoint posPackage, QString libraryName, QString packageName, QString partName) :
+  VP_AbstractDeclaration(libraryName, posLibrary)
 {
-  m_posLibrary  = posLibrary;
   m_posPackage  = posPackage;
 
-  m_library = libraryName;
   m_package = packageName;
   m_part    = partName;
 
