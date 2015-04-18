@@ -4,3 +4,9 @@ VP_Entity::VP_Entity(QString name, QPoint posDeclaration) :
   VP_AbstractDeclaration(name, posDeclaration)
 {
 }
+
+
+VP_Entity::~VP_Entity()
+{
+
+}

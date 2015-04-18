@@ -42,6 +42,11 @@ QList<Word*> AbstractParser::parse(QString &text)
     bool isCommentActive = false;
     foreach(QString str, finalStrList)
     {
+      // Manage EOL
+      bool isEOL = false;
+      if(str == "\n")
+        isEOL = true;
+
       // Manage comment
       bool thisWordIsComment = false;
       if(!isCommentActive) // Not in a comment
@@ -75,7 +80,7 @@ QList<Word*> AbstractParser::parse(QString &text)
       Word *newWord = 0;
       if(isKeyword(str))
       {
-        newWord = new KeyWord(str, lineNumber, colNumber);
+        newWord = new KeyWord(str, lineNumber, colNumber, isEOL);
 
         // Manage new line (it's consider temporaly as a keyword)
         if(isNewLine(str))
@@ -87,7 +92,7 @@ QList<Word*> AbstractParser::parse(QString &text)
 
       }
       else
-        newWord = new Word(str, lineNumber, colNumber, thisWordIsComment);
+        newWord = new Word(str, lineNumber, colNumber, isEOL, thisWordIsComment);
 
       if(newWord != 0)
       {

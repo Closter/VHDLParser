@@ -19,7 +19,6 @@
  */
 class VP_Library : public VP_AbstractDeclaration
 {
-  Q_OBJECT
 public:
   explicit VP_Library(QPoint posLibrary, QPoint posPackage, QString libraryName, QString packageName, QString partName);
 

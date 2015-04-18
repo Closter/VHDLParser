@@ -1,6 +1,7 @@
 #ifndef VP_ABSTRACTDECLARATION_H
 #define VP_ABSTRACTDECLARATION_H
 
+#include <QString>
 #include <QPoint>
 
 
@@ -13,6 +14,7 @@ class VP_AbstractDeclaration
 {
 public:
   VP_AbstractDeclaration(QString name, QPoint declarationPos);
+  ~VP_AbstractDeclaration();
 
 
   // Accessors
@@ -42,7 +44,7 @@ public:
 private:
 
   QString m_name;
-  QPoint  m_declarationPos;
+  QPoint  m_declarationPos; ///< Declaration position in the text : x for the line number and y for the column number
 };
 
 #endif // VP_ABSTRACTDECLARATION_H

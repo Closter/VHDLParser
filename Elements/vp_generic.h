@@ -9,9 +9,8 @@
  */
 class VP_Generic : public VP_AbstractDeclaration
 {
-  Q_OBJECT
 public:
-  explicit VP_Generic(QString name, QPoint pos = QPoint());
+  explicit VP_Generic(QString name, QString type, QString defaultValue, QPoint pos = QPoint());
 
   // Accessors
   //----------
@@ -22,15 +21,15 @@ public:
 
   QString getValue()
   {
-    return m_value;
+    return m_defaultValue;
   }
 
   //----------
 
 private:
 
-  QString m_type;   ///< Parameter's type
-  QString m_value;  ///< Generic's value
+  QString m_type;           ///< Parameter's type
+  QString m_defaultValue;   ///< Generic's default value
 
 };
 

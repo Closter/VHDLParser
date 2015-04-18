@@ -28,22 +28,22 @@ VP_Word* ContextEntityDeclaration::analyze(VP_Word *firstWord)
   if(firstWord->getText().compare(VP_VHDL_SX_KEYWORD_ENTITY, Qt::CaseInsensitive) == 0) // Check the entity keyword
   {
     // The entity name is the next word
-    if(currentWord->nextWord(false) != NULL)
+    if(currentWord->nextWord(true) != NULL)
     {
-      currentWord = currentWord->nextWord(false);
+      currentWord = currentWord->nextWord(true);
       QString entityName = currentWord->getText();
 
       delete m_entity;
 
-      m_entity = new VP_Entity(entityName, QPoint(firstWord->getLine(), firstWord->getColumn()), this); // Create the entity
+      m_entity = new VP_Entity(entityName, QPoint(firstWord->getLine(), firstWord->getColumn())); // Create the entity
 
-      if(currentWord->nextWord(false) != NULL) // Go to is declaration
+      if(currentWord->nextWord(true) != NULL) // Go to is declaration
       {
-        currentWord = currentWord->nextWord(false);
+        currentWord = currentWord->nextWord(true);
 
         if(currentWord->getText().compare(VP_VHDL_SX_KEYWORD_IS, Qt::CaseInsensitive) == 0) // Check for "is" keyword
         {
-          currentWord = currentWord->nextWord(false);
+          currentWord = currentWord->nextWord(true);
           findSubContext(currentWord);
         }
       }
@@ -80,17 +80,17 @@ VP_Word *ContextEntityDeclaration::findSubContext(VP_Word *firstWord)
       // Check for end of entity
       else if(currentWord->getText().compare(VP_VHDL_SX_KEYWORD_END, Qt::CaseInsensitive) == 0)
       {
-        currentWord = lastWordOfThisContext(currentWord->nextWord(false));  // Go to the start of another new context
+        currentWord = lastWordOfThisContext(currentWord->nextWord(true));  // Go to the start of another new context
         break;
       }
       else
       {
-        currentWord = currentWord->nextWord(false); // Go to next non-comment word
+        currentWord = currentWord->nextWord(true); // Go to next non-comment word
       }
     }
     else
     {
-      currentWord = currentWord->nextWord(false); // Go to next non-comment word
+      currentWord = currentWord->nextWord(true); // Go to next non-comment word
     }
   }
 

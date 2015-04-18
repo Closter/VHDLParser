@@ -9,9 +9,9 @@
  */
 class VP_Entity : public VP_AbstractDeclaration
 {
-  Q_OBJECT
 public:
   explicit VP_Entity(QString name, QPoint posDeclaration);
+  ~VP_Entity();
 
 
 private:

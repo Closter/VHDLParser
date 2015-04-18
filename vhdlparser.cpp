@@ -6,10 +6,6 @@
 // list of keyword
 QList<QString> VHDLParser::m_specialCharVHDL = QList<QString>()
     << VP_VHDL_SX_SEP_CAR_COMMENTARY        
-    << VP_VHDL_SX_SEP_CAR_DOT               
-    << VP_VHDL_SX_SEP_CAR_COLON             
-    << VP_VHDL_SX_SEP_CAR_SEMICOLON         
-    << VP_VHDL_SX_SEP_CAR_COMMA             
     << VP_VHDL_SX_SEP_CAR_SIGNAL_ASSIGNEMENT
     << VP_VHDL_SX_SEP_CAR_VAR_ASSIGNEMENT   
     << VP_VHDL_SX_SEP_CAR_PORT_ASSIGNEMENT  
@@ -26,7 +22,11 @@ QList<QString> VHDLParser::m_specialCharVHDL = QList<QString>()
     << VP_VHDL_SX_SEP_CAR_OPERATOR_MULTIPLY 
     << VP_VHDL_SX_SEP_CAR_OPERATOR_DIVIDE   
     << VP_VHDL_SX_SEP_CAR_OPERATOR_EXPO     
-    << VP_VHDL_SX_SEP_CAR_OPERATOR_CONCAT;
+    << VP_VHDL_SX_SEP_CAR_OPERATOR_CONCAT
+    << VP_VHDL_SX_SEP_CAR_DOT
+    << VP_VHDL_SX_SEP_CAR_COLON
+    << VP_VHDL_SX_SEP_CAR_SEMICOLON
+    << VP_VHDL_SX_SEP_CAR_COMMA;
 
 QList<QString> VHDLParser::m_keywordList = QList<QString>()
     << VP_VHDL_SX_KEYWORD_LIBRARY
@@ -87,8 +87,8 @@ void VHDLParser::parse(QString strToParse)
   // Extract the word list from this string
   QList<Word*> wordList = AbstractParser::parse(strToParse);
 
-  // Create the liste of VHDL words
-  //-------------------------------
+  // Create the list of VHDL words
+  //------------------------------
   m_wordList.clear();
   foreach(Word *w, wordList)
   {
@@ -102,6 +102,7 @@ void VHDLParser::parse(QString strToParse)
                                    w->getLine(),
                                    w->getColumn(),
                                    isVHDLKeyword(w),
+                                   w->isEOL(),
                                    w->isComment(),
                                    lastWord);
     if(lastWord != NULL)  // Already at least one word
@@ -109,7 +110,7 @@ void VHDLParser::parse(QString strToParse)
 
     m_wordList << newWord;
   }
-  //-------------------------------
+  //------------------------------
 
   // Reinitialize
   delete m_fileContext;

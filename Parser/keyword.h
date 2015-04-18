@@ -11,7 +11,7 @@ class KeyWord : public Word
 {
   Q_OBJECT
 public:
-  explicit KeyWord(QString strChar, int lineNumber = -1, int colNumber = -1, bool isComment = false, Word *previous = 0, Word *next = 0, QObject *parent = 0);
+  explicit KeyWord(QString strChar, int lineNumber = -1, int colNumber = -1, bool isEOL = false,  bool isComment = false, Word *previous = 0, Word *next = 0, QObject *parent = 0);
 
 
 private:
