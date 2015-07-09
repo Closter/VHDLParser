@@ -36,7 +36,7 @@ private:
   int nbWordsToSkipComments();
 
 
-  static QList<QString> m_specialCharVHDL;  ///< The string list of special character
+  static QList<QString> m_separatorVHDL;  ///< The string list of special character
   static QList<QString> m_keywordList;      ///< VHDL Keywords
 
   QList<VP_Word*> m_wordList;

@@ -8,7 +8,7 @@
 AbstractParser::AbstractParser(QObject *parent) :
   QObject(parent)
 {
-  m_specCharList << ABSTRACT_PARSE_EOL;  // Add new line character as a keyword to manage the line count
+  m_separatorList << ABSTRACT_PARSE_EOL;  // Add new line character as a keyword to manage the line count
 }
 
 /**
@@ -78,7 +78,7 @@ QList<Word*> AbstractParser::parse(QString &text)
 
       // Create the new Word
       Word *newWord = 0;
-      if(isKeyword(str))
+      if(isSeparator(str))
       {
         newWord = new KeyWord(str, lineNumber, colNumber, isEOL);
 
@@ -172,7 +172,7 @@ KeyWord *AbstractParser::searchForAKeyWord(QString str)
   bool    found = false;
   QString foundedKw;
 
-  foreach(QString kw, m_specCharList)
+  foreach(QString kw, m_separatorList)
   {
     int ixFound = str.indexOf(kw); // Look for this index
     if(ixFound != -1) // This keyword is present
@@ -199,9 +199,9 @@ KeyWord *AbstractParser::searchForAKeyWord(QString str)
  * @param word  Th string's word
  * @return True if it's a keyword otherwise False
  */
-bool AbstractParser::isKeyword(QString word)
+bool AbstractParser::isSeparator(QString word)
 {
-  return m_specCharList.contains(word);
+  return m_separatorList.contains(word);
 }
 
 

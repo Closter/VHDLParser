@@ -17,15 +17,15 @@ public:
 
   // Accessors
   //----------
-  void addKeyWord(QString word)      ///< Append a new Keyword in the list
+  void addSeparatorWord(QString word)      ///< Append a new Keyword in the list
   {
-    m_specCharList << word;
+    m_separatorList << word;
   }
 
   QList<QString> &operator<<(QString word)    ///< Append a new Keyword in the list
   {
-    addKeyWord(word);
-    return m_specCharList;
+    addSeparatorWord(word);
+    return m_separatorList;
   }
 
   void addLineCommentId(QString lineComment)  ///< Append a new line comment
@@ -39,12 +39,12 @@ private:
 
   QStringList splitByKeyword(QString &str);
   KeyWord *searchForAKeyWord(QString str);
-  bool isKeyword(QString word);
+  bool isSeparator(QString word);
   bool isNewLine(QString word);
 
 
-  QList<QString> m_specCharList;  ///< The list of keyword to analyze
-  QList<QString> m_lineComment;   ///< The list of line comment identifiers
+  QList<QString> m_separatorList;   ///< The list of separation word to analyze
+  QList<QString> m_lineComment;     ///< The list of line comment identifiers
 };
 
 #endif // ABSTRACTPARSER_H

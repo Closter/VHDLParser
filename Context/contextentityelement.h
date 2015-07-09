@@ -6,6 +6,10 @@
 #include "Elements/vp_entityelements.h"
 
 
+/**
+ * @brief The ContextEntityElement class is an abstract class use to manage entity's port declaration
+ * or generic declaration.
+ */
 class ContextEntityElement : public AbstractContext
 {
 public:

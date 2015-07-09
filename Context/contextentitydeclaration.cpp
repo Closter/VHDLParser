@@ -3,6 +3,7 @@
 #include "VHDL_Syntaxe.h"
 
 #include "contextgenericdeclaration.h"
+#include "contextportdeclaration.h"
 
 ContextEntityDeclaration::ContextEntityDeclaration( QObject *parent):
   AbstractContext(parent)
@@ -75,7 +76,7 @@ VP_Word *ContextEntityDeclaration::findSubContext(VP_Word *firstWord)
       // Check for ports declaration
       else if(currentWord->getText().compare(VP_VHDL_SX_KEYWORD_PORT, Qt::CaseInsensitive) == 0)
       {
-        // TODO New port
+        currentWord = newSubContext(new ContextPortDeclaration(this), currentWord);
       }
       // Check for end of entity
       else if(currentWord->getText().compare(VP_VHDL_SX_KEYWORD_END, Qt::CaseInsensitive) == 0)

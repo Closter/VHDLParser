@@ -3,18 +3,14 @@
 #include "VHDL_Syntaxe.h"
 
 
-ContextEntityElement::ContextEntityElement(QObject *parent)
+ContextEntityElement::ContextEntityElement(QObject *parent):
+  AbstractContext(parent)
 {
 }
 
 
 VP_Word* ContextEntityElement::analyze(VP_Word *firstWord)
 {
-  // Check for the correct keyword
-  if(firstWord->getText().compare(VP_VHDL_SX_KEYWORD_GENERIC, Qt::CaseInsensitive) != 0)
-  {
-    return firstWord; // This word is not keyword for generic declaration
-  }
 
   VP_Word *currentWord = firstWord->nextWord(2, true); // The next word is open parse, the second is the first parameter
 
@@ -34,7 +30,7 @@ VP_Word* ContextEntityElement::analyze(VP_Word *firstWord)
 
 
 /**
- * @brief ContextGenericDeclaration::newElement Extract and create the new generic parameter
+ * @brief ContextGenericDeclaration::newElement Extract and create the new generic parameter or port
  * @param elementNameWord Start at the name of the element.
  * @return The first word next to the element declaration.
  */
@@ -46,13 +42,23 @@ VP_Word* ContextEntityElement::extractElement(VP_Word *elementNameWord)
   // Get the type
   //-------------
   VP_Word *currentWord = elementNameWord->nextWord(2, true);  // Go to the type declaration
-  if(currentWord->isKeyword())  // Not the type declaration,
+  if(currentWord->isKeyword())  // Not the type declaration (port direction declaration),
     currentWord = currentWord->nextWord(true);   // go after
 
   if(currentWord == NULL)
     return NULL;  // End of text to analyze
 
-  QString elementType = currentWord->getText();
+  // The type could be composed with brackets
+  //-----------------------------------------
+  QString elementType;
+  while((currentWord->getText() != VP_VHDL_SX_SEP_CAR_SEMICOLON) &&
+        (currentWord->getText() != VP_VHDL_SX_SEP_CAR_ELEMENT_DEF_VALUE))
+  {
+    elementType.append(currentWord->getText());  // Add this
+    currentWord = currentWord->nextWord(true);
+  }
+  //-----------------------------------------
+
 
   currentWord = currentWord->nextWord(true); // Look for default value
   //-------------
@@ -60,7 +66,7 @@ VP_Word* ContextEntityElement::extractElement(VP_Word *elementNameWord)
   // Get the default value
   //----------------------
   QString elementValue = QString();
-  if(currentWord->getText() == VP_VHDL_SX_SEP_CAR_GEN_ASSIGNEMENT)
+  if(currentWord->getText() == VP_VHDL_SX_SEP_CAR_ELEMENT_DEF_VALUE)
   {
     currentWord = currentWord->nextWord(true); // Go to next word
 

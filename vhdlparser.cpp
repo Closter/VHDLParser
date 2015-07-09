@@ -4,7 +4,7 @@
 
 
 // list of keyword
-QList<QString> VHDLParser::m_specialCharVHDL = QList<QString>()
+QList<QString> VHDLParser::m_separatorVHDL = QList<QString>()
     << VP_VHDL_SX_SEP_CAR_COMMENTARY        
     << VP_VHDL_SX_SEP_CAR_SIGNAL_ASSIGNEMENT
     << VP_VHDL_SX_SEP_CAR_VAR_ASSIGNEMENT   
@@ -65,8 +65,8 @@ VHDLParser::VHDLParser(QObject *parent) :
   AbstractParser(parent)
 {
   // Construct the list of keyword
-  foreach(QString str, m_specialCharVHDL)
-    addKeyWord(str);
+  foreach(QString str, m_separatorVHDL)
+    addSeparatorWord(str);
 
   addLineCommentId(VP_VHDL_SX_SEP_CAR_COMMENTARY);
 
