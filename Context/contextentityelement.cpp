@@ -59,8 +59,6 @@ VP_Word* ContextEntityElement::extractElement(VP_Word *elementNameWord)
   }
   //-----------------------------------------
 
-
-  currentWord = currentWord->nextWord(true); // Look for default value
   //-------------
 
   // Get the default value
@@ -76,10 +74,6 @@ VP_Word* ContextEntityElement::extractElement(VP_Word *elementNameWord)
 
       currentWord = currentWord->nextWord(true);
     }
-  }
-  else  // no default value assignement
-  {
-    currentWord = currentWord->nextWord(true);
   }
   //----------------------
 
