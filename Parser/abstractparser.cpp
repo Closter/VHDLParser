@@ -80,7 +80,7 @@ QList<Word*> AbstractParser::parse(QString &text)
       Word *newWord = 0;
       if(isSeparator(str))
       {
-        newWord = new KeyWord(str, lineNumber, colNumber, isEOL);
+        newWord = new KeyWord(str, lineNumber, colNumber, isEOL, thisWordIsComment);
 
         // Manage new line (it's consider temporaly as a keyword)
         if(isNewLine(str))
